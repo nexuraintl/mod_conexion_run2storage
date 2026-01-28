@@ -29,3 +29,15 @@ class StorageService:
             return False
         blob.delete()
         return True
+    
+    def update_file(self, filename: str, file: UploadFile):
+        """Actualiza (sobrescribe) un archivo existente."""
+        blob = self.bucket.blob(filename)
+        
+        # Opcional: Verificar si existe para asegurar que es un UPDATE y no un CREATE
+        if not blob.exists():
+            return None
+        
+        # Sobrescribimos el contenido
+        blob.upload_from_file(file.file, content_type=file.content_type)
+        return {"message": f"Archivo {filename} actualizado correctamente"}

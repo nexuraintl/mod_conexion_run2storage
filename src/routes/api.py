@@ -27,3 +27,13 @@ def delete_file(filename: str):
         return {"message": f"Archivo {filename} eliminado"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.put("/files/{filename}")
+def update_file(filename: str, file: UploadFile = File(...)):
+    try:
+        result = storage_service.update_file(filename, file)
+        if not result:
+            raise HTTPException(status_code=404, detail="El archivo que intentas actualizar no existe")
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
